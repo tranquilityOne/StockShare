@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+package stockshare.common;
+
+option csharp_namespace = "StockShare.Common";
+
+enum ErrorCodes {
+    // No error (enum value must be started with zero).
+    NoError = 0;
+    // Illegal request.
+    IllegalRequest = 1000400;
+    // Access forbidden.
+    Forbidden = 1000403;
+    // Invalid operation.
+    InvalidOperation = 1000409;
+    // Quota exceeded.
+    QuotaExceeded = 1000429;
+    // Internal error.
+    InternalError = 1000500;
+}

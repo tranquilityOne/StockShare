@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>Fengchao.Gallery.WebApi.Internal</PackageId>
+    <Product>Fengchao.Gallery.WebApi.Internal</Product>
+    <Description>Fengchao gallery for ASP.NET Core</Description>
+    <PackageTags>extensions;webapi;aspnetcore</PackageTags>
+
+    <IsFengchaoPublishedPackage>true</IsFengchaoPublishedPackage>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.Core.Api" Version="2.41.1" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="5.0.8" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fengchao.Gallery.Core\Fengchao.Gallery.Core.csproj" />
+    <ProjectReference Include="..\Fengchao.Gallery.Logging\Fengchao.Gallery.Logging.csproj" />
+  </ItemGroup>
+
+</Project>
+

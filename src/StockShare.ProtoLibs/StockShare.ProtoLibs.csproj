@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);1591;SA1625</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.17.2" />
+    <PackageReference Include="Grpc.Net.ClientFactory" Version="2.37.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.38.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProtoBuf Include="..\Shared\gRPC\common.proto" GrpcServices="Server">
+      <Link>common.proto</Link>
+    </ProtoBuf>
+    <ProtoBuf Include="..\Shared\gRPC\stockshare.proto" GrpcServices="Server">
+      <Link>stockshare.proto</Link>
+    </ProtoBuf>
+    <ProtoBuf Include="..\Shared\gRPC\greeter.proto" GrpcServices="Client">
+      <Link>greeter.proto</Link>
+    </ProtoBuf>
+  </ItemGroup>
+  
+</Project>

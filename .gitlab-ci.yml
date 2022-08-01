@@ -1,0 +1,93 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  SWARM_MODE: "True"
+  PORTAINER_ENDPOINT: ""
+  GIT_SUBMODULE_STRATEGY: recursive
+
+build:
+  image: docker:20.10
+  stage: build
+  only:
+  - pushes
+  - tags
+  - triggers
+  - web
+  services:
+    - docker:20.10-dind
+  before_script:
+    - |
+      export SEMVER_REGEX="^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(\\-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?(\\+[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$"
+      if echo $CI_COMMIT_REF_NAME | grep -Eq $SEMVER_REGEX; then
+        imageTag=${CI_COMMIT_REF_NAME#?}
+        majorTag=$(echo $imageTag | cut -f1 -d .)
+        minorTag=$(echo $imageTag | cut -f1,2 -d .)
+      else
+        if [ "$CI_COMMIT_REF_NAME" == "master" ]; then 
+          imageTag="latest"; 
+        else
+          imageTag="dev"; 
+        fi
+      fi
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker pull "$CI_REGISTRY_IMAGE":builder || true
+    - docker build -t "$CI_REGISTRY_IMAGE":builder --pull -f ./src/StockShare/Dockerfile --cache-from "$CI_REGISTRY_IMAGE":builder --target restore .
+    - docker push "$CI_REGISTRY_IMAGE":builder
+    - docker build -t "$CI_REGISTRY_IMAGE":${imageTag} --pull --cache-from "$CI_REGISTRY_IMAGE":builder -f ./src/StockShare/Dockerfile --build-arg VCS_REF="$CI_COMMIT_SHORT_SHA" --build-arg BUILD_DATE=`date -u +\"%Y-%m-%dT%H:%M:%SZ\"` --build-arg BUILD_VERSION=${imageTag} .
+    - docker push "$CI_REGISTRY_IMAGE":${imageTag}
+    - |
+      if echo $CI_COMMIT_REF_NAME | grep -Eq $SEMVER_REGEX; then
+        docker tag "$CI_REGISTRY_IMAGE":"$imageTag" "$CI_REGISTRY_IMAGE":${minorTag}
+        docker push "$CI_REGISTRY_IMAGE":${minorTag}
+        docker tag "$CI_REGISTRY_IMAGE":"$imageTag" "$CI_REGISTRY_IMAGE":${majorTag}
+        docker push "$CI_REGISTRY_IMAGE":${majorTag}
+      else
+        if [ "$CI_COMMIT_REF_NAME" == "master" ]; then
+          docker tag "$CI_REGISTRY_IMAGE":"$imageTag" "$CI_REGISTRY_IMAGE":dev
+          docker push "$CI_REGISTRY_IMAGE":dev
+        fi
+      fi
+
+deploy:
+  image: docker:20.10
+  stage: deploy
+  needs:
+    - build
+  when: manual
+  services:
+    - docker:20.10-dind
+  variables:
+    PROJECT_NAME: "stockshare"
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE
+  before_script:
+    - |
+      export SEMVER_REGEX="^v(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(\\-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?(\\+[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$"
+      if echo $CI_COMMIT_REF_NAME | grep -Eq $SEMVER_REGEX; then
+        imageTag=${CI_COMMIT_REF_NAME#?}
+      else
+        if [ "$CI_COMMIT_REF_NAME" == "master" ]; then 
+          imageTag="latest"; 
+        else
+          if [ "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "master" ]; then
+            imageTag="latest";
+          else
+            imageTag="dev"; 
+          fi
+        fi
+      fi
+  script:
+    - docker run
+     --env SWARM_MODE=$SWARM_MODE
+     --env PORTAINER_URL=$PORTAINER_URL
+     --env PORTAINER_USERNAME=$PORTAINER_USERNAME
+     --env PORTAINER_PASSWORD=$PORTAINER_PASSWORD
+     --env REGISTRY_HOST=$REGISTRY_HOST
+     --env REGISTRY_USERNAME=$REGISTRY_USERNAME
+     --env REGISTRY_PASSWORD=$REGISTRY_PASSWORD
+     --env PORTAINER_ENDPOINT=$PORTAINER_ENDPOINT
+     --env PROJECT_NAME=$PROJECT_NAME
+     --env DOCKER_IMAGE=$DOCKER_IMAGE:${imageTag}
+     --rm antsoftxyz/portainer-api portainer-api --stack=app

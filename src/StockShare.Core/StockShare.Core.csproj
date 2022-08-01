@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);1591;SA1625;SA1300</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.11.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StockShare.ProtoLibs\StockShare.ProtoLibs.csproj" />
+    <ProjectReference Include="..\Gallery\Fengchao.Gallery.Core\Fengchao.Gallery.Core.csproj" />
+    <ProjectReference Include="..\Gallery\Fengchao.Gallery.Logging\Fengchao.Gallery.Logging.csproj" />
+  </ItemGroup>
+
+</Project>
+

@@ -1,0 +1,21 @@
+syntax = "proto3";
+package greeter;
+
+option csharp_namespace = "Fengchao.Greeter";
+
+service GreeterService {
+	rpc LeaveMessage (LeaveMessageRequest) returns (LeaveMessageResponse) {}
+}
+
+message LeaveMessageRequest {
+	string SenderName = 1;
+	string ReceiverName = 2;
+	string Message = 3;
+}
+
+message LeaveMessageResponse {
+	string SenderName = 1;
+	string ReceiverName = 2;
+	string Message = 3;
+	int64 SendTime = 4;
+}

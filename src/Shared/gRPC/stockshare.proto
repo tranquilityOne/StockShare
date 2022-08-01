@@ -1,0 +1,37 @@
+syntax = "proto3";
+package stockshare;
+
+option csharp_namespace = "StockShare";
+
+enum ErrorCodes {
+    // No error (enum value must be started with zero).
+    NoError = 0;
+    // Role name must be started with word or digit, and only word, digit, underscore, hyphen are allowed. Besides, 'admin' is preserved.
+    InvalidRoleName = 1001001;
+    // Role existed.
+    RoleExisted = 1001002;
+    // Role has been bound to users.
+    RoleInUse = 1001003;
+    // User name and password not matches.
+    UserNameAndPasswordNotMatch = 1001004;
+    // User not exists.
+    UserNotExist = 1001005;
+    // User is disabled.
+    UserDisabled = 1001006;
+    // User name is occupied.
+    UserNameOccupied = 1001007;
+    // User name must be started with word or digit, and only word, digit, underscore, hyphen are allowed. Besides, 'admin' is preserved.
+    InvalidUserName = 1001008;
+    // Password must be different from the old one.
+    PasswordNotChange = 1001009;
+    // Password must be consist of minimum 6 characters, at least three kinds of the following chars: { upper case words, lower case words, digits, special characters }.
+    InvalidPassword = 1001010;
+    // Invalid email address.
+    InvalidEmail = 1001011;
+    // Invalid ip pattern.
+    InvalidIpPattern = 1001020;
+    // Invalid multi-factor authentication code.
+    InvalidMFACode = 1001021;
+    // Password is incorrect.
+    IncorrectPassword = 1001022;
+}
