@@ -10,7 +10,7 @@ namespace StockShare.Data.Entities
     /// 上海交易所每日行情
     /// </summary>
     [Table("Daily_ZB")]
-    public class Daily_ZB_Entity : DailyEntity
+    public class Daily_ZB_Entity : DailyBasicEntity
     {
     }
 }

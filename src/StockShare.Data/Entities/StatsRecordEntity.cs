@@ -11,7 +11,7 @@ namespace StockShare.Data.Entities
     /// 统计记录
     /// </summary>
     [Table("QuotesStatsRecord")]
-    public class QuotesStatsRecordEntity : EntityBase
+    public class StatsRecordEntity : EntityBase
     {
         /// <summary>
         /// 开始交易日期
@@ -27,6 +27,6 @@ namespace StockShare.Data.Entities
         /// <summary>
         /// 统计类型
         /// </summary>
-        public QuotesStatsType QuotesStatsType { get; set; }
+        public StatsRecordType StatsRecordType { get; set; }
     }
 }

@@ -46,7 +46,12 @@ namespace StockShare.Data
         /// <summary>
         /// QuotesStatsRecords
         /// </summary>
-        public DbSet<QuotesStatsRecordEntity> QuotesStatsRecords => Set<QuotesStatsRecordEntity>();
+        public DbSet<StatsRecordEntity> StatsRecords => Set<StatsRecordEntity>();
+
+        /// <summary>
+        /// DailyBasic
+        /// </summary>
+        public DbSet<DailyBasicEntity> DailyBasic => Set<DailyBasicEntity>();
 
         public void OnBusinessModelCreating(ModelBuilder modelBuilder)
         {
@@ -69,14 +74,20 @@ namespace StockShare.Data
             ModelBuilderDailyEntity<Daily_KCB_Entity>(modelBuilder);
             ModelBuilderDailyEntity<Daily_ZXB_Entity>(modelBuilder);
 
-            modelBuilder.Entity<QuotesStatsRecordEntity>(e =>
+            modelBuilder.Entity<StatsRecordEntity>(e =>
             {
                 e.HasKey(e => e.Id);
+            });
+
+            modelBuilder.Entity<DailyBasicEntity>(e =>
+            {
+                e.HasKey(e => e.Id);
+                e.HasIndex(e => new { e.Trade_Date, e.TS_Code }).IsUnique();
             });
         }
 
         private void ModelBuilderDailyEntity<T>(ModelBuilder modelBuilder)
-            where T : DailyEntity
+            where T : DailyBasicEntity
         {
             modelBuilder.Entity<T>(e =>
             {
@@ -84,7 +95,7 @@ namespace StockShare.Data
                 e.HasIndex(e => new { e.TS_Code, e.Trade_Date }).IsUnique();
                 e.HasIndex(e => e.TS_Code);
                 e.HasIndex(e => e.Trade_Date);
-                e.HasIndex(e => e.Percentage_Change);
+                e.HasIndex(e => e.Pct_Change);
                 e.HasIndex(e => e.Volume);
                 e.HasIndex(e => e.Amount);
             });

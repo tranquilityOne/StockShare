@@ -47,7 +47,7 @@ namespace StockShare.Services
 
             // api 限制返回5000笔交易记录
             DateTime startTradeDate = DateTime.Now.AddYears(-10), endTradeDate = DateTime.Now;
-            var statsRecord = await _dbContext.QuotesStatsRecords.AsNoTracking().Where(p => p.QuotesStatsType == QuotesStatsType.Daily).OrderByDescending(p => p.Id).FirstOrDefaultAsync();
+            var statsRecord = await _dbContext.StatsRecords.AsNoTracking().Where(p => p.StatsRecordType == StatsRecordType.Daily).OrderByDescending(p => p.Id).FirstOrDefaultAsync();
             if (statsRecord != null)
             {
                 startTradeDate = DateTime.ParseExact(statsRecord.StartTradeDate.ToString(), "yyyyMMdd", CultureInfo.InvariantCulture);
@@ -85,31 +85,30 @@ namespace StockShare.Services
                 _logger.LogInformation($"TSCode {item.TS_Code},{DateTime.Now}");
             }
 
-            await _dbContext.QuotesStatsRecords.AddAsync(new QuotesStatsRecordEntity()
+            await _dbContext.StatsRecords.AddAsync(new StatsRecordEntity()
             {
                 StartTradeDate = int.Parse(startTradeDate.ToString("yyyyMMdd")),
                 EndTradeDate = int.Parse(endTradeDate.ToString("yyyyMMdd")),
-                QuotesStatsType = QuotesStatsType.Daily
+                StatsRecordType = StatsRecordType.Daily
             });
 
-            IEnumerable<DailyEntity> ParseDailyEntity(DataModel data)
+            IEnumerable<DailyBasicEntity> ParseDailyEntity(DataModel data)
             {
-                var result = new List<DailyEntity>();
+                var result = new List<DailyBasicEntity>();
                 foreach (var item in data.Items)
                 {
-                    result.Add(new DailyEntity()
+                    result.Add(new DailyBasicEntity()
                     {
                         TS_Code = item[0] ?? string.Empty,
                         Trade_Date = item[1] ?? string.Empty,
-                        Open = float.Parse(item[2] ?? "0"),
-                        High = float.Parse(item[3] ?? "0"),
-                        Low = float.Parse(item[4] ?? "0"),
-                        Close = float.Parse(item[5] ?? "0"),
-                        Pre_Close = float.Parse(item[6] ?? "0"),
-                        Change = float.Parse(item[7] ?? "0"),
-                        Percentage_Change = float.Parse(item[8] ?? "0"),
-                        Volume = float.Parse(item[9] ?? "0"),
-                        Amount = float.Parse(item[10] ?? "0")
+                        Open = decimal.Parse(item[2] ?? "0"),
+                        High = decimal.Parse(item[3] ?? "0"),
+                        Low = decimal.Parse(item[4] ?? "0"),
+                        Close = decimal.Parse(item[5] ?? "0"),
+                        Change = decimal.Parse(item[7] ?? "0"),
+                        Pct_Change = decimal.Parse(item[8] ?? "0"),
+                        Volume = decimal.Parse(item[9] ?? "0"),
+                        Amount = decimal.Parse(item[10] ?? "0")
                     });
                 }
 
@@ -156,8 +155,8 @@ namespace StockShare.Services
                         var currentItems = saveEntities.Skip(insertPageSize * index).Take(insertPageSize);
                         foreach (var item in currentItems)
                         {
-                            insertConcatSql += $@"(N'{item.TS_Code}','{item.Trade_Date}',{item.Open},{item.High},{item.Low},{item.Close},{item.Pre_Close},{item.Change}
-,{item.Percentage_Change},{item.Volume},{item.Amount},current_timestamp()),";
+                            insertConcatSql += $@"(N'{item.TS_Code}','{item.Trade_Date}',{item.Open},{item.High},{item.Low},{item.Close},{item.Change}
+,{item.Pct_Change},{item.Volume},{item.Amount},current_timestamp()),";
                         }
 
                         var sql = @$"insert into {tableName}

@@ -9,7 +9,7 @@ namespace StockShare.Data.Entities
     /// 北交所板块每日行情
     /// </summary>
     [Table("Daily_BJS")]
-    public class Daily_BJS_Entity : DailyEntity
+    public class Daily_BJS_Entity : DailyBasicEntity
     {
     }
 }

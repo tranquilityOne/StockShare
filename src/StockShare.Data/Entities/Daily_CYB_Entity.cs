@@ -10,7 +10,7 @@ namespace StockShare.Data.Entities
     /// 创业板每日行情
     /// </summary>
     [Table("Daily_CYB")]
-    public class Daily_CYB_Entity : DailyEntity
+    public class Daily_CYB_Entity : DailyBasicEntity
     {
     }
 }

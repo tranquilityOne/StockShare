@@ -10,7 +10,7 @@ namespace StockShare.Data.Entities
     /// 科创板每日行情
     /// </summary>
     [Table("Daily_KCB")]
-    public class Daily_KCB_Entity : DailyEntity
+    public class Daily_KCB_Entity : DailyBasicEntity
     {
     }
 }

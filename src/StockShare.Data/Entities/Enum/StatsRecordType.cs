@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StockShare.Data.Entities.Enum
 {
-    public enum QuotesStatsType
+    public enum StatsRecordType
     {
         /// <summary>
         /// Unkown
