@@ -27,8 +27,8 @@ namespace StockShare.Tests
         {
             var scopeFactory = TestsBase.ServiceProvider.GetRequiredService<IServiceScopeFactory>();
             var scope = scopeFactory.CreateScope();
-            _stockBasicService = scope.ServiceProvider.GetRequiredService<TuShareStockBasicService>();
-            _dailyQuotesService = scope.ServiceProvider.GetRequiredService<TuShareDailyQuotesService>();
+            _stockBasicService = scope.ServiceProvider.GetRequiredService<IStockBasicService>();
+            _dailyQuotesService = scope.ServiceProvider.GetRequiredService<IDailyQuotesService>();
             _tuShareWebService = scope.ServiceProvider.GetRequiredService<TuShareApiRequestService>();
         }
 
@@ -67,7 +67,7 @@ namespace StockShare.Tests
         [TestMethod]
         public void TestSyncStockBasicInfo()
         {
-            _stockBasicService.SyncStockBasicInfo().Wait();
+            _stockBasicService.AutoSyncStockBasicInfo().Wait();
             Assert.IsTrue(true);
         }
 

@@ -1,4 +1,5 @@
 using Dapper;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using StockShare.Data.Entities.Enum;
 using StockShare.Services.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -45,58 +47,32 @@ namespace StockShare.Services
         }
 
         /// <summary>
-        /// SyncStockBasicInfo
+        /// AutoSyncStockBasicInfo
         /// </summary>
-        public async Task SyncStockBasicInfo()
+        public async Task AutoSyncStockBasicInfo()
         {
-            var response = await _tuShareWebService.PostAsync(new TuShareStockBasicRequest()
+            var listStatus = new string[] { "D", "L", "P", };
+            var saveStockEntities = new List<StockEntity>();
+            foreach (var item in listStatus)
             {
-                List_status = "L"
-            }, Stock_Basic_Api, Stock_Basic_Fields);
-
-            if (response != null && response.Code == "0")
-            {
-                var saveEntities = ParseStockBasicEntity(response.Data);
-                int insertPageSize = 100, index = 0, errorNum = 0;
-                var total = saveEntities.Count();
-
-                while (insertPageSize * index < total)
+                var rsp = await _tuShareWebService.PostAsync(new TuShareStockBasicRequest()
                 {
-                    try
+                    List_status = item
+                }, Stock_Basic_Api, Stock_Basic_Fields);
+                if (rsp != null && rsp.Code == "0")
+                {
+                    if (rsp.Data.Items.Any())
                     {
-                        var insertConcatSql = string.Empty;
-                        var currentItems = saveEntities.Skip(insertPageSize * index).Take(insertPageSize);
-                        foreach (var item in currentItems)
-                        {
-                            insertConcatSql += $@"
-('{item.TS_Code}','{item.Symbol}',N'{item.Name}',N'{item.Area}',N'{item.Industry}',N'{item.FullName}',""{item.EnName}"",'{item.CnSpell}',N'{item.Market}',
-N'{item.List_Status}','{item.List_Date}','{item.Delist_Date}',N'{item.IS_HS}',current_timestamp()),";
-                        }
-
-                        var sql = @$"
-insert into stock(TS_Code, Symbol, Name, Area, Industry, FullName, EnName, CnSpell, Market, List_Status,List_Date, Delist_Date, IS_HS, CreatedOn)
-values {insertConcatSql.TrimEnd(',')} as new
-on duplicate key update
-Name = new.Name,Industry = new.Industry,FullName = new.FullName,EnName = new.EnName,CnSpell = new.CnSpell,
-List_Status = new.List_Status,List_Date=new.List_Date,Delist_Date = new.Delist_Date,IS_HS = new.IS_HS;";
-
-                        await _dbContext.Database.GetDbConnection().ExecuteAsync(sql);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError("Insert stock data error {ex}", ex);
-                        if (errorNum > 5)
-                        {
-                            return;
-                        }
-
-                        errorNum++;
-                    }
-                    finally
-                    {
-                        index++;
+                        saveStockEntities.AddRange(ParseStockBasicEntity(rsp.Data));
                     }
                 }
+            }
+
+            if (saveStockEntities.Any())
+            {
+                var bulkConfig = new BulkConfig() { BatchSize = 500 };
+                await _dbContext.BulkInsertOrUpdateAsync(saveStockEntities, bulkConfig);
+                await _dbContext.BulkSaveChangesAsync();
             }
 
             IEnumerable<StockEntity> ParseStockBasicEntity(DataModel data)
@@ -119,12 +95,19 @@ List_Status = new.List_Status,List_Date=new.List_Date,Delist_Date = new.Delist_D
                         List_Status = item[9] ?? string.Empty,
                         List_Date = item[10] ?? string.Empty,
                         Delist_Date = item[11] ?? string.Empty,
-                        IS_HS = item[12] ?? string.Empty
+                        IS_HS = item[12] ?? string.Empty,
+                        CreatedOn = DateTime.Now
                     });
                 }
 
                 return saveEntities;
             }
+        }
+
+        /// <inheritdoc/>
+        public Task CustomSyncStockBasicInfo(IEnumerable<string> ts_Codes)
+        {
+            throw new NotImplementedException();
         }
     }
 }

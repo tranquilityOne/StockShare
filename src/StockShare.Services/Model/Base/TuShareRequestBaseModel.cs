@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace StockShare.Core.Models
+namespace StockShare.Services.Model
 {
     /// <summary>
     /// tushare request base model

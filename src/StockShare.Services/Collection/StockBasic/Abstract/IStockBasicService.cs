@@ -13,6 +13,12 @@ namespace StockShare.Services
         /// <summary>
         /// Sync basics stock list infors
         /// </summary>
-        public Task SyncStockBasicInfo();
+        public Task AutoSyncStockBasicInfo();
+
+        /// <summary>
+        /// .CustomSyncStockBasicInfo
+        /// </summary>
+        /// <param name="ts_Codes"></param>
+        public Task CustomSyncStockBasicInfo(IEnumerable<string> ts_Codes);
     }
 }

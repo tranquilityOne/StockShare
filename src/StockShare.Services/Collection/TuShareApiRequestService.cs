@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using StockShare.Core.Configuration;
-using StockShare.Core.Models;
+using StockShare.Services.Model;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
