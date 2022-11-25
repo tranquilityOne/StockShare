@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Serilog;
@@ -34,22 +35,23 @@ namespace StockShare.Tests
         {
             Context = context;
 
-            ServiceProvider = Microsoft.AspNetCore.WebHost.CreateDefaultBuilder()
-                .ConfigureAppConfiguration((ctx, builder) =>
-                {
-                    ctx.HostingEnvironment.EnvironmentName = "Development";
+            ServiceProvider = Host.CreateDefaultBuilder()
+                .ConfigureWebHostDefaults(webHostBuilder =>
+                    webHostBuilder.ConfigureAppConfiguration((ctx, builder) =>
+                    {
+                        ctx.HostingEnvironment.EnvironmentName = "Development";
 
-                    builder.SetBasePath(Path.Combine(AppContext.BaseDirectory, "Configs"))
-                        .AddJsonFile("appsettings.json", optional: false)
-                        .AddJsonFile($"appsettings.{ctx.HostingEnvironment.EnvironmentName}.json", optional: true)
-                        .AddEnvironmentVariables()
-                        .AddUserSecrets<Program>();
-                })
-                .ConfigureLogging((ctx, builder) =>
-                {
-                    builder.ClearProviders();
-                })
-                .UseStartup<Startup>()
+                        builder.SetBasePath(Path.Combine(AppContext.BaseDirectory, "Configs"))
+                            .AddJsonFile("appsettings.json", optional: false)
+                            .AddJsonFile($"appsettings.{ctx.HostingEnvironment.EnvironmentName}.json", optional: true)
+                            .AddEnvironmentVariables()
+                            .AddUserSecrets<Program>();
+                    })
+                    .ConfigureLogging((ctx, builder) =>
+                    {
+                        builder.ClearProviders();
+                    })
+                    .UseStartup<Startup>())
                 .UseSerilog()
                 .Build()
                 .Services;

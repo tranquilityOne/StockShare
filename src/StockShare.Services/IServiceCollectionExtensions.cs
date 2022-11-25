@@ -19,6 +19,7 @@ namespace StockShare.Services
 
             services.AddScoped<IStockBasicService, TuShareStockBasicService>();
             services.AddScoped<IDailyQuotesService, TuShareDailyQuotesService>();
+            services.AddScoped<TuShareApiRequestService>();
             return services;
         }
     }

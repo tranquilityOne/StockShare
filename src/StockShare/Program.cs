@@ -1,4 +1,4 @@
-﻿using Fengchao.Gallery.Logging;
+using Fengchao.Gallery.Logging;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -46,38 +46,39 @@ namespace StockShare
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((ctx, builder) =>
-                {
-                    builder.SetBasePath(Path.Combine(AppContext.BaseDirectory, "Configs"))
-                        .AddJsonFile("appsettings.json", optional: false)
-                        .AddJsonFile($"appsettings.{ctx.HostingEnvironment.EnvironmentName}.json", optional: true)
-                        .AddJsonFile($"appsettings.ratelimit.json", optional: false)
-                        .AddConsul("app/stockshare", options =>
-                        {
-                            options.ConsulConfigurationOptions = cco => { cco.Address = new Uri("http://consul:8500"); };
-                            options.Optional = true;
-                            options.ReloadOnChange = true;
-                            options.OnLoadException = exceptionContext => { exceptionContext.Ignore = true; };
-                        })
-                        .AddEnvironmentVariables()
-                        .AddCommandLine(args);
-
-                    if (ctx.HostingEnvironment.IsDevelopment())
+        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args).
+                ConfigureWebHostDefaults(webHostBuilder =>
+                    webHostBuilder.ConfigureAppConfiguration((ctx, builder) =>
                     {
-                        builder.AddUserSecrets<Program>();
-                    }
-                })
-                .ConfigureLogging((ctx, builder) =>
-                {
-                    builder.ClearProviders();
-                })
-                .ConfigureServices(services =>
-                {
-                    services.AddHostedService<DefaultHostedService>();
-                })
-                .UseStartup<Startup>()
+                        builder.SetBasePath(Path.Combine(AppContext.BaseDirectory, "Configs"))
+                            .AddJsonFile("appsettings.json", optional: false)
+                            .AddJsonFile($"appsettings.{ctx.HostingEnvironment.EnvironmentName}.json", optional: true)
+                            .AddJsonFile($"appsettings.ratelimit.json", optional: false)
+                            .AddConsul("app/stockshare", options =>
+                            {
+                                options.ConsulConfigurationOptions = cco => { cco.Address = new Uri("http://consul:8500"); };
+                                options.Optional = true;
+                                options.ReloadOnChange = true;
+                                options.OnLoadException = exceptionContext => { exceptionContext.Ignore = true; };
+                            })
+                            .AddEnvironmentVariables()
+                            .AddCommandLine(args);
+
+                        if (ctx.HostingEnvironment.IsDevelopment())
+                        {
+                            builder.AddUserSecrets<Program>();
+                        }
+                    })
+                    .ConfigureLogging((ctx, builder) =>
+                    {
+                        builder.ClearProviders();
+                    })
+                    .ConfigureServices(services =>
+                    {
+                        services.AddHostedService<DefaultHostedService>();
+                    })
+                    .UseStartup<Startup>())
                 .UseSerilog();
     }
 }

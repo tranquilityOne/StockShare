@@ -38,8 +38,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fengchao.Gallery.Logging", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fengchao.Gallery.WebApi", "src\Gallery\Fengchao.Gallery.WebApi\Fengchao.Gallery.WebApi.csproj", "{8F63D426-DD98-4C61-B3EF-1D6F75218E92}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockShare.Collection", "src\StockShare.Collection\StockShare.Collection.csproj", "{F1522258-530D-406C-A2CE-568555DD8F34}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,10 +80,6 @@ Global
 		{8F63D426-DD98-4C61-B3EF-1D6F75218E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F63D426-DD98-4C61-B3EF-1D6F75218E92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F63D426-DD98-4C61-B3EF-1D6F75218E92}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1522258-530D-406C-A2CE-568555DD8F34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1522258-530D-406C-A2CE-568555DD8F34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1522258-530D-406C-A2CE-568555DD8F34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1522258-530D-406C-A2CE-568555DD8F34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,7 +95,6 @@ Global
 		{8F698DC7-AD4F-41BB-A7AE-743977F7D989} = {DA851033-5D33-4647-AD38-3BE067E61DCD}
 		{9FD3A326-5650-4649-9CDC-E829E437C8B4} = {DA851033-5D33-4647-AD38-3BE067E61DCD}
 		{8F63D426-DD98-4C61-B3EF-1D6F75218E92} = {DA851033-5D33-4647-AD38-3BE067E61DCD}
-		{F1522258-530D-406C-A2CE-568555DD8F34} = {A6C6DAC3-594E-4A50-B496-1521AFE447CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {837E3EBE-596B-4A3F-89F5-70CB935E6AC4}

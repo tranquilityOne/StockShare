@@ -51,7 +51,7 @@ namespace StockShare.Services
         {
             var response = await _tuShareWebService.PostAsync(new TuShareStockBasicRequest()
             {
-                List_status = "P"
+                List_status = "L"
             }, Stock_Basic_Api, Stock_Basic_Fields);
 
             if (response != null && response.Code == "0")
