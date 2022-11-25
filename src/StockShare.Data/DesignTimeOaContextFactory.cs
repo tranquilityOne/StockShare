@@ -22,7 +22,7 @@ namespace StockShare.Data
                 .SetBasePath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Configs"))
                 .AddJsonFile("appsettings.json", optional: false)
                 .AddJsonFile($"appsettings.{environment}.json", optional: true)
-                .AddUserSecrets(Assembly.Load("StockShare"))
+                .AddUserSecrets(Assembly.Load("StockShare.API"))
                 .Build();
 
             var connectionString = config.GetConnectionString("StockShareContext");

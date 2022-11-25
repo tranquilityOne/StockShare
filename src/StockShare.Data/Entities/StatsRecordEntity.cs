@@ -10,7 +10,7 @@ namespace StockShare.Data.Entities
     /// <summary>
     /// 统计记录
     /// </summary>
-    [Table("QuotesStatsRecord")]
+    [Table("StatsRecord")]
     public class StatsRecordEntity : EntityBase
     {
         /// <summary>

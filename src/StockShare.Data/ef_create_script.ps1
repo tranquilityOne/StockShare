@@ -4,7 +4,7 @@ param (
     [string]$file = $(Read-Host 'Input output file name, please')
 )
 
-$EntryProject = "$PSScriptRoot/../StockShare/StockShare.csproj"
+$EntryProject = "$PSScriptRoot/../StockShare/StockShare.API.csproj"
 $Project = "$PSScriptRoot/StockShare.Data.csproj"
 
 dotnet ef migrations script $from $to -s $EntryProject -p $Project --context StockShareContext -o ./Scripts/$file

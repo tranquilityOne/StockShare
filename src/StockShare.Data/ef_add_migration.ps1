@@ -2,7 +2,7 @@ param (
     [string]$name = $(Read-Host 'What is the name of this migration')
 )
 
-$EntryProject = "$PSScriptRoot/../StockShare/StockShare.csproj"
+$EntryProject = "$PSScriptRoot/../StockShare/StockShare.API.csproj"
 $Project = "$PSScriptRoot/StockShare.Data.csproj"
 $DbContext = "StockShareContext"
 

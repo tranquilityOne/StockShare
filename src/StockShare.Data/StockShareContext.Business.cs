@@ -48,11 +48,6 @@ namespace StockShare.Data
         /// </summary>
         public DbSet<StatsRecordEntity> StatsRecords => Set<StatsRecordEntity>();
 
-        /// <summary>
-        /// DailyBasic
-        /// </summary>
-        public DbSet<DailyBasicEntity> DailyBasic => Set<DailyBasicEntity>();
-
         public void OnBusinessModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MemberEntity>(e =>
@@ -77,12 +72,6 @@ namespace StockShare.Data
             modelBuilder.Entity<StatsRecordEntity>(e =>
             {
                 e.HasKey(e => e.Id);
-            });
-
-            modelBuilder.Entity<DailyBasicEntity>(e =>
-            {
-                e.HasKey(e => e.Id);
-                e.HasIndex(e => new { e.Trade_Date, e.TS_Code }).IsUnique();
             });
         }
 

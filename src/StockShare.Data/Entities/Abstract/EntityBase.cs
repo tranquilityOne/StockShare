@@ -8,7 +8,7 @@ namespace StockShare.Data.Entities
     public abstract class EntityBase
     {
         /// <summary>
-        /// ID
+        /// Id
         /// </summary>
         public int Id { get; set; }
 

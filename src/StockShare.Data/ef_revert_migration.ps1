@@ -1,4 +1,4 @@
-$EntryProject = "$PSScriptRoot/../StockShare/StockShare.csproj"
+$EntryProject = "$PSScriptRoot/../StockShare/StockShare.API.csproj"
 $Project = "$PSScriptRoot/StockShare.Data.csproj"
 $DbContext = "StockShareContext"
 
