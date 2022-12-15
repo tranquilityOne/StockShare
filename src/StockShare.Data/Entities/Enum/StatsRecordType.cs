@@ -12,9 +12,9 @@ namespace StockShare.Data.Entities.Enum
         Unkown = 0,
 
         /// <summary>
-        /// Daily
+        /// Daily Quote
         /// </summary>
-        Daily = 1,
+        DailyQuote = 1,
 
         /// <summary>
         /// Monthly

@@ -8,7 +8,7 @@ namespace StockShare.Services.Model
     /// <summary>
     /// 日线行情请求参数
     /// </summary>
-    public class TuShareDailyRequest
+    public class TuShareDailyQuoteRequest
     {
         /// <summary>
         /// 股票代码

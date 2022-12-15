@@ -24,9 +24,6 @@ namespace StockShare.Services
     /// </summary>
     public class TuShareStockBasicService : IStockBasicService
     {
-        private const string Stock_Basic_Fields = "ts_code,symbol,name,area,industry,fullname,enname,cnspell,market,list_status,list_date,delist_date,is_hs";
-        private const string Stock_Basic_Api = "stock_basic";
-
         private readonly ILogger<TuShareStockBasicService> _logger;
         private readonly TuShareApiRequestService _tuShareWebService;
         private readonly StockShareContext _dbContext;
@@ -58,7 +55,7 @@ namespace StockShare.Services
                 var rsp = await _tuShareWebService.PostAsync(new TuShareStockBasicRequest()
                 {
                     List_status = item
-                }, Stock_Basic_Api, Stock_Basic_Fields);
+                }, TushareApiConstant.Stock_Basic_Api, TushareApiConstant.Stock_Basic_Fields);
                 if (rsp != null && rsp.Code == "0")
                 {
                     if (rsp.Data.Items.Any())

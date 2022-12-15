@@ -49,15 +49,47 @@ namespace StockShare.Tests
         /// TestTuSharePost_Daily
         /// </summary>
         [TestMethod]
-        public void TestTuSharePost_Daily()
+        public void TestTuSharePostDaily()
         {
             var response = _tuShareWebService.PostAsync(
-               new TuShareDailyRequest()
+               new TuShareDailyQuoteRequest()
                {
-                   Start_Date = "20220708",
-                   End_Date = "20220708",
-                   TS_Code = "603626.SH"
+                   Start_Date = "20220531",
+                   End_Date = "20220601",
+                   TS_Code = "600941.SH"
                }, "daily", string.Empty).Result;
+            Assert.IsNotNull(response);
+        }
+
+        /// <summary>
+        /// TestTuSharePostAdjFactor
+        /// </summary>
+        [TestMethod]
+        public void TestTuSharePostAdjFactor()
+        {
+            var response = _tuShareWebService.PostAsync(
+               new TuShareDailyQuoteRequest()
+               {
+                   Start_Date = "20220531",
+                   End_Date = "20220601",
+                   TS_Code = "600941.SH"
+               }, TushareApiConstant.Adj_Factor_Api, string.Empty).Result;
+            Assert.IsNotNull(response);
+        }
+
+        /// <summary>
+        /// TestTuSharePostDailyBasic
+        /// </summary>
+        [TestMethod]
+        public void TestTuSharePostDailyBasic()
+        {
+            var response = _tuShareWebService.PostAsync(
+               new TuShareDailyQuoteRequest()
+               {
+                   Start_Date = "20220531",
+                   End_Date = "20220601",
+                   TS_Code = "600941.SH"
+               }, TushareApiConstant.Daily_Basic_Api, string.Empty).Result;
             Assert.IsNotNull(response);
         }
 
@@ -77,7 +109,9 @@ namespace StockShare.Tests
         [TestMethod]
         public void TestSyncDailyQuotes()
         {
-            _dailyQuotesService.SyncDailyQuotes().Wait();
+            var listCodes = new List<string>();
+            string startDate = "20221124", endDate = "20221125";
+            _dailyQuotesService.SyncDailyQuotes(listCodes, startDate, endDate).Wait();
             Assert.IsTrue(true);
         }
     }
