@@ -1,12 +1,10 @@
 using AutoMapper;
-using Fengchao.Greeter;
-using StockShare.Areas.Private.ViewModels;
 using StockShare.Data.Entities;
 
-namespace StockShare.Mappers
+namespace StockShare.Services.Mappers
 {
     /// <summary>
-    /// Provides mapping configrations for business logic.
+    /// Provides mapping configrations
     /// </summary>
     public class BusinessMappingProfile : Profile
     {
@@ -15,8 +13,6 @@ namespace StockShare.Mappers
         /// </summary>
         public BusinessMappingProfile()
         {
-            CreateMap<GreetMessage, LeaveMessageRequest>();
-
             CreateMap<DailyBasicEntity, Daily_BJS_Entity>();
             CreateMap<DailyBasicEntity, Daily_CYB_Entity>();
             CreateMap<DailyBasicEntity, Daily_ZB_Entity>();

@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using StockShare.Data.Entities;
 using StockShare.Services;
 using StockShare.Services.Model;
 using System;
@@ -110,7 +112,7 @@ namespace StockShare.Tests
         public void TestSyncDailyQuotes()
         {
             var listCodes = new List<string>();
-            string startDate = "20221124", endDate = "20221125";
+            string startDate = "20230101", endDate = "20230206";
             _dailyQuotesService.SyncDailyQuotes(listCodes, startDate, endDate).Wait();
             Assert.IsTrue(true);
         }

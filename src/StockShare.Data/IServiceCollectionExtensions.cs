@@ -15,7 +15,7 @@ namespace StockShare.Data
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
         /// <param name="connectionString">Database connection string.</param>
         /// <returns>A reference to this instance after the operation has completed.</returns>
-        public static IServiceCollection AddDbContext(this IServiceCollection services, string connectionString)
+        public static IServiceCollection AddDbContext(this IServiceCollection services, string? connectionString)
         {
             services.AddDbContextPool<StockShareContext>((sp, options) =>
             {

@@ -15,6 +15,7 @@ using StockShare.Core.Configuration;
 using StockShare.Core.Contexts;
 using StockShare.Data;
 using StockShare.Filters;
+using StockShare.Mappers;
 using StockShare.ProtoLibs;
 using StockShare.RateLimit;
 using StockShare.Services;
@@ -105,7 +106,7 @@ namespace StockShare
             services.AddServices();
 
             // Mapping
-            services.AddSingleton(provider =>
+            /*services.AddSingleton(provider =>
             {
                 return new MapperConfiguration(expr =>
                 {
@@ -119,7 +120,9 @@ namespace StockShare
                     }
                 })
                 .CreateMapper();
-            });
+            });*/
+
+            services.AddAutoMapper(typeof(BusinessMappingProfile));
 
             // Grpc clients
             services.AddGrpcServices(configuration);

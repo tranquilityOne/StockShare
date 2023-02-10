@@ -1,3 +1,4 @@
+using AutoMapper;
 using Dapper;
 using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
@@ -24,17 +25,20 @@ namespace StockShare.Services
         private readonly ILogger<TuShareDailyQuotesService> _logger;
         private readonly TuShareApiRequestService _tuShareApiRequest;
         private readonly StockShareContext _dbContext;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TuShareDailyQuotesService"/> class.
         /// </summary>
         public TuShareDailyQuotesService(ILogger<TuShareDailyQuotesService> logger,
             TuShareApiRequestService tuShareApiRequest,
-            StockShareContext dbContext)
+            StockShareContext dbContext,
+            IMapper mapper)
         {
             _logger = logger;
             _dbContext = dbContext;
             _tuShareApiRequest = tuShareApiRequest;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -213,19 +217,19 @@ namespace StockShare.Services
                 switch (stockMarket)
                 {
                     case "主板":
-                        await _dbContext.BulkInsertAsync((IList<Daily_ZB_Entity>)dailyQuoteList);
+                        await _dbContext.BulkInsertOrUpdateAsync(_mapper.Map<List<DailyBasicEntity>, List<Daily_ZB_Entity>>(dailyQuoteList));
                         break;
                     case "创业板":
-                        await _dbContext.BulkInsertAsync((IList<Daily_CYB_Entity>)dailyQuoteList);
+                        await _dbContext.BulkInsertOrUpdateAsync(_mapper.Map<List<DailyBasicEntity>, List<Daily_CYB_Entity>>(dailyQuoteList));
                         break;
                     case "科创板":
-                        await _dbContext.BulkInsertAsync((IList<Daily_KCB_Entity>)dailyQuoteList);
+                        await _dbContext.BulkInsertOrUpdateAsync(_mapper.Map<List<DailyBasicEntity>, List<Daily_KCB_Entity>>(dailyQuoteList));
                         break;
                     case "中小板":
-                        await _dbContext.BulkInsertAsync((IList<Daily_ZXB_Entity>)dailyQuoteList);
+                        await _dbContext.BulkInsertOrUpdateAsync(_mapper.Map<List<DailyBasicEntity>, List<Daily_ZXB_Entity>>(dailyQuoteList));
                         break;
                     case "北交所":
-                        await _dbContext.BulkInsertAsync((IList<Daily_BJS_Entity>)dailyQuoteList);
+                        await _dbContext.BulkInsertOrUpdateAsync(_mapper.Map<List<DailyBasicEntity>, List<Daily_BJS_Entity>>(dailyQuoteList));
                         break;
                 }
 
