@@ -112,7 +112,7 @@ namespace StockShare.Tests
         public void TestSyncDailyQuotes()
         {
             var listCodes = new List<string>();
-            string startDate = "20230101", endDate = "20230206";
+            string startDate = "20230208", endDate = "20230209";
             _dailyQuotesService.SyncDailyQuotes(listCodes, startDate, endDate).Wait();
             Assert.IsTrue(true);
         }

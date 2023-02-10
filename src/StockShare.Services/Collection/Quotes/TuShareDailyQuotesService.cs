@@ -214,26 +214,61 @@ namespace StockShare.Services
                     return;
                 }
 
+                var tableName = string.Empty;
                 switch (stockMarket)
                 {
                     case "主板":
-                        await _dbContext.BulkInsertOrUpdateAsync(_mapper.Map<List<DailyBasicEntity>, List<Daily_ZB_Entity>>(dailyQuoteList));
+                        tableName = "daily_zb";
                         break;
                     case "创业板":
-                        await _dbContext.BulkInsertOrUpdateAsync(_mapper.Map<List<DailyBasicEntity>, List<Daily_CYB_Entity>>(dailyQuoteList));
+                        tableName = "daily_cyb";
                         break;
                     case "科创板":
-                        await _dbContext.BulkInsertOrUpdateAsync(_mapper.Map<List<DailyBasicEntity>, List<Daily_KCB_Entity>>(dailyQuoteList));
+                        tableName = "daily_kcb";
                         break;
                     case "中小板":
-                        await _dbContext.BulkInsertOrUpdateAsync(_mapper.Map<List<DailyBasicEntity>, List<Daily_ZXB_Entity>>(dailyQuoteList));
+                        tableName = "daily_zxb";
                         break;
                     case "北交所":
-                        await _dbContext.BulkInsertOrUpdateAsync(_mapper.Map<List<DailyBasicEntity>, List<Daily_BJS_Entity>>(dailyQuoteList));
+                        tableName = "daily_bjs";
                         break;
-                }
+                    default:
+                        throw new ArgumentNullException($"stockMarket {stockMarket} not exists.");
+                  }
 
-                await _dbContext.SaveChangesAsync();
+                int insertPageSize = 100, index = 0;
+                var total = dailyQuoteList.Count();
+                while (insertPageSize * index < total)
+                {
+                    var insertConcatSql = string.Empty;
+                    var currentItems = dailyQuoteList.Skip(insertPageSize * index).Take(insertPageSize);
+
+                    foreach (var item in currentItems)
+                    {
+                        insertConcatSql += $@"
+(CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,'','{item.Trade_Date}','{item.TS_Code}',{item.Adj_Factor},
+{item.Open},{item.Open_HFQ},{item.Open_QFQ},{item.High},{item.High_HFQ},{item.High_QFQ},{item.Low},{item.Low_QFQ},{item.Low_HFQ},{item.Close},{item.Close_QFQ},{item.Close_HFQ},
+{item.Up_Limit},{item.Down_Limit},{item.Volume},{item.Amount},{item.Change},{item.Pct_Change},{item.TurnOver_Rate},{item.TurnOver_Rate_Float},{item.Volume_Ratio},
+{item.PE},{item.PE_TTM},{item.PB},{item.PS},{item.PS_TTM},{item.DV_Ratio},{item.DV_Ratio_TTM},{item.Total_Share},{item.Float_Share},
+{item.Free_Share},{item.Total_MV},{item.Circ_MV}),";
+                    }
+
+                    var sql = @$"INSERT INTO stockshare.{tableName} (CreatedOn, LatestUpdatedOn, Comment, Trade_Date, TS_Code, Adj_Factor, 
+`Open`, Open_HFQ, Open_QFQ, High, High_HFQ, High_QFQ, Low, Low_QFQ, Low_HFQ, `Close`, Close_QFQ, Close_HFQ, 
+Up_Limit, Down_Limit, Volume, Amount, `Change`, Pct_Change, TurnOver_Rate, TurnOver_Rate_Float, Volume_Ratio, 
+PE, PE_TTM, PB, PS, PS_TTM, DV_Ratio, DV_Ratio_TTM, Total_Share, Float_Share, Free_Share, Total_MV, Circ_MV)
+values {insertConcatSql.TrimEnd(',')} as new
+on duplicate key update
+Adj_Factor = new.Adj_Factor,`Open` = new.`Open`,Open_HFQ = new.Open_HFQ,Open_QFQ = new.Open_HFQ,High = new.High,High_HFQ = new.High_HFQ,
+High_QFQ = new.High_QFQ,Low = new.Low,Low_QFQ = new.Low_QFQ,Low_HFQ = new.Low_HFQ,`Close` = new.`Close`,Close_QFQ = new.Close_QFQ,
+Close_HFQ = new.Close_HFQ,Up_Limit = new.Up_Limit,Down_Limit = new.Down_Limit,Volume = new.Volume,Amount = new.Amount,`Change` = new.`Change`,
+Pct_Change = new.Pct_Change,TurnOver_Rate = new.TurnOver_Rate,Volume_Ratio = new.Volume_Ratio,PE = new.PE,PE_TTM = new.PE_TTM,PB = new.PB,
+PS = new.PS,PS_TTM = new.PS_TTM,DV_Ratio = new.DV_Ratio,DV_Ratio_TTM = new.DV_Ratio_TTM,Total_Share = new.Total_Share,Float_Share = new.Float_Share,
+Free_Share = new.Free_Share,Total_MV = new.Total_MV,Circ_MV = new.Circ_MV;";
+
+                    await _dbContext.Database.GetDbConnection().ExecuteAsync(sql);
+                    index++;
+                }
             }
         }
     }
