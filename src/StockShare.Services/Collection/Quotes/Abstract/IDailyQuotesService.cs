@@ -13,6 +13,6 @@ namespace StockShare.Services
         /// <summary>
         /// Sync Daily Quotes
         /// </summary>
-        public Task SyncDailyQuotes(IEnumerable<string> ts_Codes, string startDate, string endDate);
+        public Task SyncDailyQuotesAsync(IEnumerable<string> ts_Codes, string startDate, string endDate);
     }
 }

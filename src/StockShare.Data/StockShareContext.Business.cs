@@ -73,6 +73,13 @@ namespace StockShare.Data
             {
                 e.HasKey(e => e.Id);
             });
+
+            modelBuilder.Entity<FinanceIndicatorEntity>(e =>
+            {
+                e.HasKey(e => e.Id);
+                e.HasIndex(e => new { e.Ts_Code, e.End_date }).IsUnique();
+                e.HasIndex(e => e.Roe);
+            });
         }
 
         private void ModelBuilderDailyEntity<T>(ModelBuilder modelBuilder)

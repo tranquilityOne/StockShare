@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using StockShare.Services.Collection;
 
 namespace StockShare.Services
 {
@@ -19,7 +20,8 @@ namespace StockShare.Services
 
             services.AddScoped<IStockBasicService, TuShareStockBasicService>();
             services.AddScoped<IDailyQuotesService, TuShareDailyQuotesService>();
-            services.AddScoped<TuShareApiRequestService>();
+            services.AddScoped<TuShareApiRequestService>()
+                .AddScoped<TuShareFinaIndicatorService>();
             return services;
         }
     }

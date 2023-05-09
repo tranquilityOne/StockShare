@@ -47,7 +47,7 @@ namespace StockShare.Services
         /// <param name="ts_Codes"></param>
         /// <param name="startDate">yyyyMMdd</param>
         /// <param name="endDate">yyyyMMdd</param>
-        public async Task SyncDailyQuotes(IEnumerable<string> ts_Codes, string startDate, string endDate)
+        public async Task SyncDailyQuotesAsync(IEnumerable<string> ts_Codes, string startDate, string endDate)
         {
             // api 限制返回5000笔交易记录
             //DateTime startTradeDate = DateTime.Now.AddYears(-10), endTradeDate = DateTime.Now;

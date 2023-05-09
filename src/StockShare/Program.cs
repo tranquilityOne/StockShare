@@ -76,7 +76,7 @@ namespace StockShare
                     })
                     .ConfigureServices(services =>
                     {
-                        services.AddHostedService<DefaultHostedService>();
+                        services.AddHostedService<SyncHostedService>();
                     })
                     .UseStartup<Startup>())
                 .UseSerilog();

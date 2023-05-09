@@ -1,8 +1,10 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using StockShare.Data;
 using StockShare.Data.Entities;
 using StockShare.Services;
+using StockShare.Services.Collection;
 using StockShare.Services.Model;
 using System;
 using System.Collections.Generic;
@@ -21,6 +23,8 @@ namespace StockShare.Tests
         private readonly IStockBasicService _stockBasicService = default!;
         private readonly TuShareApiRequestService _tuShareWebService = default!;
         private readonly IDailyQuotesService _dailyQuotesService;
+        private readonly StockShareContext _dbContext;
+        private readonly TuShareFinaIndicatorService _taShareFinaIndicatorService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StockServiceTest"/> class.
@@ -32,6 +36,8 @@ namespace StockShare.Tests
             _stockBasicService = scope.ServiceProvider.GetRequiredService<IStockBasicService>();
             _dailyQuotesService = scope.ServiceProvider.GetRequiredService<IDailyQuotesService>();
             _tuShareWebService = scope.ServiceProvider.GetRequiredService<TuShareApiRequestService>();
+            _dbContext = scope.ServiceProvider.GetRequiredService<StockShareContext>();
+            _taShareFinaIndicatorService = scope.ServiceProvider.GetRequiredService<TuShareFinaIndicatorService>();
         }
 
         /// <summary>
@@ -113,7 +119,18 @@ namespace StockShare.Tests
         {
             var listCodes = new List<string>();
             string startDate = "20230208", endDate = "20230209";
-            _dailyQuotesService.SyncDailyQuotes(listCodes, startDate, endDate).Wait();
+            _dailyQuotesService.SyncDailyQuotesAsync(listCodes, startDate, endDate).Wait();
+            Assert.IsTrue(true);
+        }
+
+        /// <summary>
+        /// TestSyncFiananceIndicator
+        /// </summary>
+        [TestMethod]
+        public void TestSyncFiananceIndicator()
+        {
+            var listCodes = _dbContext.Stocks.Select(p => p.TS_Code).ToList();
+            _taShareFinaIndicatorService.SyncFinIndicatorAsync(listCodes, "20220101", "20230401", string.Empty).Wait();
             Assert.IsTrue(true);
         }
     }

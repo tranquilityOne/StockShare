@@ -21,7 +21,8 @@ namespace StockShare.Data
             {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
                 options.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
-                options.EnableSensitiveDataLogging(Debugger.IsAttached);
+
+                // options.EnableSensitiveDataLogging(Debugger.IsAttached);
             });
 
             return services;

@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace StockShare.Data.Entities.Enum
 {
-    public enum StatsRecordType
+    /// <summary>
+    /// 财务报表类型
+    /// </summary>
+    public enum ReportEndType
     {
         /// <summary>
         /// Unkown
@@ -12,23 +17,23 @@ namespace StockShare.Data.Entities.Enum
         Unkown = 0,
 
         /// <summary>
-        /// Daily Quote
+        /// 一季报
         /// </summary>
-        DailyQuote = 1,
+        First = 1,
 
         /// <summary>
-        /// Monthly
+        /// 中报
         /// </summary>
-        Monthly = 2,
+        Second = 2,
 
         /// <summary>
-        /// Yearly
+        /// 三季报
         /// </summary>
-        Yearly = 3,
+        Third = 3,
 
         /// <summary>
-        /// FinanceIndicator
+        /// 年报
         /// </summary>
-        FinanceIndicator = 4
+        Fourth = 4
     }
 }

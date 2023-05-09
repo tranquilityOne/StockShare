@@ -11,7 +11,7 @@ namespace StockShare.Data.Entities
     /// <summary>
     /// 财务指标数据
     /// </summary>
-    [Table("Daily_BJS")]
+    [Table("FinanceIndicator")]
     public class FinanceIndicatorEntity : EntityBase
     {
         /// <summary>
@@ -33,6 +33,11 @@ namespace StockShare.Data.Entities
         public string End_date { get; set; } = default!;
 
         /// <summary>
+        /// 季度报告类型 (一季报,中报,三季报,年报)
+        /// </summary>
+        public int End_type { get; set; }
+
+        /// <summary>
         /// 非经常性损益
         /// </summary>
         public decimal Extra_item { get; set; } = default!;
@@ -46,26 +51,6 @@ namespace StockShare.Data.Entities
         /// 毛利
         /// </summary>
         public decimal Gross_margin { get; set; } = default!;
-
-        /// <summary>
-        /// 流动比率 (流动资产合计/流动负债合计)
-        /// </summary>
-        public decimal Current_ratio { get; set; } = default;
-
-        /// <summary>
-        /// 速动比率 (流动资产-存货等/流动负债合计)
-        /// </summary>
-        public decimal Quick_ratio { get; set; }
-
-        /// <summary>
-        /// 存货周转率 (存货周转率又名库存周转率，是企业一定时期营业成本（销货成本）与平均存货余额的比率)
-        /// </summary>
-        public decimal Inv_turn { get; set; }
-
-        /// <summary>
-        /// 应收账款周转率 (应收账款周转率越高，说明其收回越快)
-        /// </summary>
-        public decimal Ar_turn { get; set; }
 
         /// <summary>
         /// 经营活动净收益
@@ -128,6 +113,11 @@ namespace StockShare.Data.Entities
         public decimal Tangible_asset { get; set; }
 
         /// <summary>
+        /// 全部投入资本
+        /// </summary>
+        public decimal Invest_capital { get; set; }
+
+        /// <summary>
         /// 留存收益
         /// </summary>
         public decimal Retained_earnings { get; set; }
@@ -184,5 +174,10 @@ namespace StockShare.Data.Entities
         /// 资产负债率
         /// </summary>
         public decimal Debt_to_assets { get; set; }
+
+        /// <summary>
+        /// 研发费用
+        /// </summary>
+        public decimal Rd_exp { get; set; }
     }
 }
