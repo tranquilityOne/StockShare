@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StockShare.Data;
 
@@ -10,9 +11,11 @@ using StockShare.Data;
 namespace StockShare.Data.Migrations
 {
     [DbContext(typeof(StockShareContext))]
-    partial class StockShareContextModelSnapshot : ModelSnapshot
+    [Migration("20230509085210_Add_ReportEndType")]
+    partial class AddReportEndType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -803,11 +806,6 @@ namespace StockShare.Data.Migrations
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("End_date")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<string>("End_date_year")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");

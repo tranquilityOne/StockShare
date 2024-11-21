@@ -94,6 +94,7 @@ namespace StockShare.SystemServices
         }
 
         /// <inheritdoc/>
+        [Obsolete]
         public async Task BlockAccessTokenAsync(string accessToken)
         {
             if (string.IsNullOrWhiteSpace(accessToken))

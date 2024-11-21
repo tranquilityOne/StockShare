@@ -33,6 +33,12 @@ namespace StockShare.Data.Entities
         public string End_date { get; set; } = default!;
 
         /// <summary>
+        /// 报告期年份
+        /// </summary>
+        [StringLength(30)]
+        public string End_date_year { get; set; } = string.Empty;
+
+        /// <summary>
         /// 季度报告类型 (一季报,中报,三季报,年报)
         /// </summary>
         public int End_type { get; set; }

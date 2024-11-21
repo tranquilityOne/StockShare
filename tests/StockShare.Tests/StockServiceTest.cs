@@ -130,7 +130,7 @@ namespace StockShare.Tests
         public void TestSyncFiananceIndicator()
         {
             var listCodes = _dbContext.Stocks.Select(p => p.TS_Code).ToList();
-            _taShareFinaIndicatorService.SyncFinIndicatorAsync(listCodes, "20220101", "20230401", string.Empty).Wait();
+            _taShareFinaIndicatorService.SyncFinIndicatorAsync(listCodes, "20120101", "20230508", string.Empty).Wait();
             Assert.IsTrue(true);
         }
     }

@@ -48,7 +48,7 @@ namespace StockShare.Services.Collection
         /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
         public async Task SyncFinIndicatorAsync(IEnumerable<string> ts_Codes, string startDate, string endDate, string period)
         {
-            int errorNum = 0;
+            int errorNum = 0, index = 0;
             foreach (var ts_code in ts_Codes)
             {
                 var request = new TuShareFinaIndicatorRequest()
@@ -116,13 +116,13 @@ namespace StockShare.Services.Collection
                         DateTime.TryParseExact(entity.End_date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDateTime);
                         switch (endDateTime.Month)
                         {
-                            case 4:
+                            case 3:
                                 entity.End_type = (int)ReportEndType.First;
                                 break;
-                            case 8:
+                            case 6:
                                 entity.End_type = (int)ReportEndType.Second;
                                 break;
-                            case 10:
+                            case 9:
                                 entity.End_type = (int)ReportEndType.Third;
                                 break;
                             case 12:
@@ -134,6 +134,7 @@ namespace StockShare.Services.Collection
                     }
 
                     await _dbContext.BulkInsertOrUpdateAsync(finIndicatorList);
+                    index++;
                 }
                 catch (Exception ex)
                 {

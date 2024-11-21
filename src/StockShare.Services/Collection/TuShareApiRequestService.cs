@@ -66,7 +66,7 @@ namespace StockShare.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("PostAsync error", ex);
+                _logger.LogError(ex, "PostAsync error");
             }
 
             return null;
